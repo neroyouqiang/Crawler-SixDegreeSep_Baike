@@ -1,23 +1,17 @@
 from BaikeUrl import *
-from myfuncs import *
+from utility import *
 
 
-class SolutionFound(RuntimeError):
+def start_search_depth(currentbkurl, targetbkurl, linktree, finaltrace, depth):
     """
-    "Error" used to indicates finding the solution
-    """
-    def __init__(self, message):
-        self.message = message
-
-
-def start_search(currentbkurl, targetbkurl, linktree, depth):
-    """
-
-    :param currentbkurl:
-    :param targetbkurl:
+    Depth-first search
+    :param currentbkurl: current url
+    :param targetbkurl: target url
+    :param linktree: link tree for record
+    :param finaltrace: final trace for record
+    :param depth: the max level of depth
     :return:
     """
-    global TraceList
 
     # if the search is deep enough
     if depth == 0:
@@ -39,48 +33,44 @@ def start_search(currentbkurl, targetbkurl, linktree, depth):
     # recursive search
     for _bkurl in _bkurls:
         try:
-            start_search(_bkurl, targetbkurl, linktree[_bkurl.Word], depth - 1)
+            start_search_depth(_bkurl, targetbkurl, linktree[_bkurl.Word], finaltrace, depth - 1)
         except SolutionFound as e:
             # print previous message
             print(e.message)
             # record trace list
-            TraceList.insert(1, _bkurl.Word)
+            finaltrace.insert(1, _bkurl.Word)
             # raise transition word
             raise SolutionFound("Transition word: %s" % _bkurl.Word)
 
-    # return the link tree
-    # if depth > 1:
-    #     print(_linkree)
-    # return _linkree
 
-
-# global link tree
-LinkTree = {}
-
-# global trace list
-TraceList = []
 
 if __name__ == "__main__":
     # set start and target url
     startbkurl = BaikeUrl("六度分隔理论")
     targetbkurl = BaikeUrl("马萨诸塞州")
 
+    # link tree
+    linktree = {}
+
+    # final trace
+    finaltrace = []
+
     # create global variables
-    LinkTree[startbkurl.Word] = {}
-    TraceList.append(startbkurl.Word)
+    linktree[startbkurl.Word] = {}
+    finaltrace.append(startbkurl.Word)
 
     # print start word
     print("Search Start: %s" % startbkurl.Word)
 
     # start searching
     try:
-        start_search(startbkurl, targetbkurl, LinkTree[startbkurl.Word], 2)
+        start_search_depth(startbkurl, targetbkurl, linktree[startbkurl.Word], finaltrace, 2)
         print("Solution not found")
     except SolutionFound as e:
         # print previous message
         print(e.message)
         # record trace list
-        TraceList.append(targetbkurl.Word)
+        finaltrace.append(targetbkurl.Word)
         # print end word
         print("Search End: %s" % targetbkurl.Word)
 
@@ -93,7 +83,7 @@ if __name__ == "__main__":
     # print the trace list
     print("")
     print("The trace list is:")
-    print(TraceList)
+    print(finaltrace)
 
 
 

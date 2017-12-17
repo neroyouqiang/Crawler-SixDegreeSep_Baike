@@ -3,6 +3,14 @@ from bs4 import BeautifulSoup
 import re
 
 
+class SolutionFound(RuntimeError):
+    """
+    "Error" used to indicates finding the solution
+    """
+    def __init__(self, message):
+        self.message = message
+
+
 def get_baike_urls(url):
     """
     Collect the Baike urls in the given page

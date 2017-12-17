@@ -15,6 +15,8 @@ class BaikeUrl:
     Word = None
     # postfix of the url
     Others = None
+    # Baike full word of the url. Inluding "Word" and "Others"
+    FullWord = None
 
     def __init__(self, url):
         # regular expressions
@@ -44,6 +46,7 @@ class BaikeUrl:
 
         # make up the full url
         self.FullUrl = "https://" + self.DomainName + "/item/" + urllib.parse.quote(self.Word) + self.Others
+        self.FullWord = self.Word + self.Others
 
         #print("Result:")
         #print(self.BaikeWord)
