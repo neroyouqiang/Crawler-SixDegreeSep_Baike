@@ -58,7 +58,7 @@ def start_search_breadth(startbkurl, targetbkurl, isloadsave=True):
             if targetbkurl.Word == _currentbkurl.Word:
                 _currenttrace.append(targetbkurl.Word)
 
-                # save the trace data
+                # save1 the trace data
                 save_link_data(startbkurl.FullWord, targetbkurl.FullWord, _newtrace)
 
                 # return the final trace
@@ -70,8 +70,8 @@ def start_search_breadth(startbkurl, targetbkurl, isloadsave=True):
 
 if __name__ == "__main__":
     # set start and target url
-    startbkurl = BaikeUrl("青岛大学")
-    targetbkurl = BaikeUrl("胡歌")
+    startbkurl = BaikeUrl("胡军")
+    targetbkurl = BaikeUrl("天龙八部")
 
     # start searching
     finaltrace = start_search_breadth(startbkurl, targetbkurl)

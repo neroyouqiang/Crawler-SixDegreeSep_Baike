@@ -2,6 +2,7 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import re
 import pickle
+import os
 
 
 class SolutionFound(RuntimeError):
@@ -35,12 +36,16 @@ def save_link_data(startword, targetword, tracelist):
     :param tracelist: trace list
     :return:
     """
+    # check the dictionary and create it
+    if not os.path.exists("save/"):
+        os.mkdir("save/")
+
+    # save1 the file
     _dict = {
         "startword": startword,
         "targetword": targetword,
         "tracelist": tracelist
     }
-
     _file = open("save/trace_%s_%s.dat" % (startword, targetword), "wb+")
     pickle.dump(_dict, _file)
 
@@ -52,6 +57,7 @@ def load_link_data(startword, targetword):
     :param targetword: target word
     :return: return None if not found the file
     """
+    # load file
     try:
         _file = open("save/trace_%s_%s.dat" % (startword, targetword), "rb")
         return pickle.load(_file)
