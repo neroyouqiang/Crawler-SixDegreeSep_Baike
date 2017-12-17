@@ -1,6 +1,7 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import re
+import pickle
 
 
 class SolutionFound(RuntimeError):
@@ -24,3 +25,36 @@ def get_baike_urls(url):
     # collect all the Baike urls
     _bkurls = {_link["href"] for _link in _bsobj.findAll("a", href=re.compile(r"^/item/.+"))}
     return _bkurls
+
+
+def save_link_data(startword, targetword, tracelist):
+    """
+    Save the trace data
+    :param startword: start word
+    :param targetword: target word
+    :param tracelist: trace list
+    :return:
+    """
+    _dict = {
+        "startword": startword,
+        "targetword": targetword,
+        "tracelist": tracelist
+    }
+
+    _file = open("save/trace_%s_%s.dat" % (startword, targetword), "wb+")
+    pickle.dump(_dict, _file)
+
+
+def load_link_data(startword, targetword):
+    """
+    Load the trace data
+    :param startword: start word
+    :param targetword: target word
+    :return: return None if not found the file
+    """
+    try:
+        _file = open("save/trace_%s_%s.dat" % (startword, targetword), "rb")
+        return pickle.load(_file)
+    except FileNotFoundError:
+        # not found file
+        return None

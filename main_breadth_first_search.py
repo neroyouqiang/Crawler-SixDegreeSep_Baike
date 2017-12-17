@@ -2,13 +2,21 @@ from BaikeUrl import *
 from utility import *
 
 
-def start_search_breadth(startbkurl, targetbkurl):
+def start_search_breadth(startbkurl, targetbkurl, isloadsave=True):
     """
     Breadth-first search
-    :param currentbkurl: current url
+    :param startbkurl: current url
     :param targetbkurl: target url
+    :param isloadsave: if load saved file
     :return:
     """
+    # try to open existing file
+    if isloadsave:
+        _trace = load_link_data(startbkurl.FullWord, targetbkurl.FullWord)
+        # found the file
+        if _trace:
+            return _trace["tracelist"]
+
     # trace waiting for search
     _tracequeue = [[startbkurl.Word]]
 
@@ -50,6 +58,9 @@ def start_search_breadth(startbkurl, targetbkurl):
             if targetbkurl.Word == _currentbkurl.Word:
                 _currenttrace.append(targetbkurl.Word)
 
+                # save the trace data
+                save_link_data(startbkurl.FullWord, targetbkurl.FullWord, _newtrace)
+
                 # return the final trace
                 return _newtrace
 
@@ -59,8 +70,8 @@ def start_search_breadth(startbkurl, targetbkurl):
 
 if __name__ == "__main__":
     # set start and target url
-    startbkurl = BaikeUrl("胡军")
-    targetbkurl = BaikeUrl("郑天庸")
+    startbkurl = BaikeUrl("青岛大学")
+    targetbkurl = BaikeUrl("胡歌")
 
     # start searching
     finaltrace = start_search_breadth(startbkurl, targetbkurl)
@@ -68,10 +79,9 @@ if __name__ == "__main__":
     # print the trace list
     print("")
     if finaltrace:
+        # print result
         print("Trace found! The trace list is:")
         print(finaltrace)
     else:
+        # print result
         print("Trace no found!")
-
-
-
